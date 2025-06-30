@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>જૉબ કાર્ડ ફૉર્મ</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fdf7f3;
+      color: #333;
+      padding: 40px;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      padding: 40px;
+    }
+    h2 {
+      text-align: center;
+      color: #5b3a70;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 600;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-top: 5px;
+      font-size: 15px;
+      background-color: #fafafa;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .checkbox-group label {
+      font-weight: normal;
+      font-size: 14px;
+    }
+    .checkbox-group input[type="checkbox"] {
+      transform: scale(1.3);
+      margin-right: 6px;
+    }
+    button {
+      width: 100%;
+      background-color: #c8a2c8;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 30px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #b58fc2;
+    }
+  </style>
+  <script>
+    function populateDropdown(id, sheetName) {
+      google.script.run.withSuccessHandler(values => {
+        const el = document.getElementById(id);
+        el.innerHTML = '<option value="">પસંદ કરો</option>';
+        values.forEach(val => {
+          const opt = document.createElement("option");
+          opt.value = opt.text = val;
+          el.appendChild(opt);
+        });
+      }).getDropdownValues(sheetName);
+    }
+
+    function getCheckboxValues(name) {
+      return Array.from(document.querySelectorAll(`input[name='${name}']:checked`)).map(cb => cb.value).join(", ");
+    }
+
+    function submitForm() {
+      const data = [
+        document.getElementById('date').value,
+        document.getElementById('jobNo').value,
+        document.getElementById('client').value,
+        document.getElementById('jobName').value,
+        document.getElementById('gram').value,
+        document.getElementById('paperQuality').value,
+        document.getElementById('size').value,
+        document.getElementById('stock').value,
+        document.getElementById('copies').value,
+        document.getElementById('totalPulling').value,
+        getCheckboxValues('side'),
+        getCheckboxValues('color'),
+        getCheckboxValues('sample'),
+        getCheckboxValues('binding'),
+        getCheckboxValues('lamination'),
+        document.getElementById('sampleText').value,
+        document.getElementById('paperSupplier').value,
+        document.getElementById('plate').value
+      ];
+      google.script.run.saveJobCard(data);
+      alert("✔️ જૉબ કાર્ડ સફળતાપૂર્વક સબમિટ થયું!");
+      document.getElementById("jobForm").reset();
+    }
+
+    window.onload = () => {
+      populateDropdown('client', 'Client Name');
+      populateDropdown('gram', 'Gram');
+      populateDropdown('paperQuality', 'Paper Quality');
+      populateDropdown('plate', 'Plate Supplier');
+      populateDropdown('paperSupplier', 'Paper Supplier');
+    };
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>જૉબ કાર્ડ ફૉર્મ</h2>
+    <form id="jobForm" onsubmit="submitForm(); return false;">
+      <label>તારીખ</label>
+      <input type="date" id="date">
+
+      <label>નં.</label>
+      <input type="text" id="jobNo">
+
+      <label>પાર્ટીએ નું નામ</label>
+      <select id="client"></select>
+
+      <label>જોબએ નું નામ</label>
+      <input type="text" id="jobName">
+
+      <label>ગ્રામ</label>
+      <select id="gram"></select>
+
+      <label>પેપર ક્વોલિટી</label>
+      <select id="paperQuality"></select>
+
+      <label>કટીંગ સાઇઝ</label>
+      <input type="text" id="size">
+
+      <label>પેપર સ્ટોક રહેશે</label>
+      <input type="text" id="stock">
+
+      <label>કોપી</label>
+      <input type="number" id="copies">
+
+      <label>ટોટલ પુલિયો</label>
+      <input type="number" id="totalPulling">
+
+      <label>છાપવાનું સાઇડ</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="side" value="સિંગલ સાઇડ"> સિંગલ સાઇડ</label>
+        <label><input type="checkbox" name="side" value="F/B"> F/B</label>
+        <label><input type="checkbox" name="side" value="ગ્રુપ પટ્ટી"> ગ્રુપ પટ્ટી</label>
+        <label><input type="checkbox" name="side" value="F+B"> F+B</label>
+      </div>
+
+      <label>કલર પ્રિન્ટ</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="color" value="હા"> હા</label>
+      </div>
+
+      <label>પ્રિન્ટિંગ સેમ્પલ</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="sample" value="હા"> હા</label>
+      </div>
+
+      <label>પાટવે બોલાવવી</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="binding" value="હા"> હા</label>
+      </div>
+
+      <label>લેમિનેશન</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="lamination" value="હા"> હા</label>
+      </div>
+
+      <label>પ્રિન્ટિંગ સેમ્પલ વિગત</label>
+      <input type="text" id="sampleText">
+
+      <label>પેપર કોણો</label>
+      <select id="paperSupplier"></select>
+
+      <label>પ્લેટ ક્યાન્થી આવશે</label>
+      <select id="plate"></select>
+
+      <button type="submit">સબમિટ કરો</button>
+    </form>
+  </div>
+</body>
+</html>
