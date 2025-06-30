@@ -33,8 +33,8 @@ function saveJobCard(data) {
   Logger.log("Saving job card data: " + JSON.stringify(data));
 
   // Optional: validate length
-  if (data.length !== 18) {
-    throw new Error(`Expected 18 values but got ${data.length}. Check form fields.`);
+  if (data.length !== 21) {
+    throw new Error(`Expected 21 values but got ${data.length}. Check form fields.`);
   }
 
   sheet.appendRow(data);

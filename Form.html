@@ -38,6 +38,14 @@
       font-size: 15px;
       background-color: #fafafa;
     }
+    .row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .row .col {
+      flex: 1 1 200px;
+    }
     .checkbox-group {
       display: flex;
       flex-wrap: wrap;
@@ -97,6 +105,9 @@
         document.getElementById('stock').value,
         document.getElementById('copies').value,
         document.getElementById('totalPulling').value,
+        document.getElementById('printingColour').value,
+        document.getElementById('totalJob').value,
+        document.getElementById('jobCounter').value,
         getCheckboxValues('side'),
         getCheckboxValues('color'),
         getCheckboxValues('sample'),
@@ -124,11 +135,16 @@
   <div class="container">
     <h2>જૉબ કાર્ડ ફૉર્મ</h2>
     <form id="jobForm" onsubmit="submitForm(); return false;">
-      <label>તારીખ</label>
-      <input type="date" id="date">
-
-      <label>નં.</label>
-      <input type="text" id="jobNo">
+      <div class="row">
+        <div class="col">
+          <label>તારીખ</label>
+          <input type="date" id="date">
+        </div>
+        <div class="col">
+          <label>નં.</label>
+          <input type="text" id="jobNo">
+        </div>
+      </div>
 
       <label>પાર્ટીએ નું નામ</label>
       <select id="client"></select>
@@ -136,11 +152,16 @@
       <label>જોબએ નું નામ</label>
       <input type="text" id="jobName">
 
-      <label>ગ્રામ</label>
-      <select id="gram"></select>
-
-      <label>પેપર ક્વોલિટી</label>
-      <select id="paperQuality"></select>
+      <div class="row">
+        <div class="col">
+          <label>ગ્રામ</label>
+          <select id="gram"></select>
+        </div>
+        <div class="col">
+          <label>પેપર ક્વોલિટી</label>
+          <select id="paperQuality"></select>
+        </div>
+      </div>
 
       <label>કટીંગ સાઇઝ</label>
       <input type="text" id="size">
@@ -148,11 +169,34 @@
       <label>પેપર સ્ટોક રહેશે</label>
       <input type="text" id="stock">
 
-      <label>કોપી</label>
-      <input type="number" id="copies">
+      <div class="row">
+        <div class="col">
+          <label>કોપી</label>
+          <input type="number" id="copies">
+        </div>
+        <div class="col">
+          <label>ટોટલ પુલીંગ</label>
+          <input type="number" id="totalPulling">
+        </div>
+      </div>
 
-      <label>ટોટલ પુલિયો</label>
-      <input type="number" id="totalPulling">
+      <label>પ્રિન્ટિંગ કલર</label>
+      <select id="printingColour">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </select>
+
+      <label>ટોટલ જૉબ</label>
+      <input type="number" id="totalJob">
+
+      <label>જોબ કાઉન્ટર</label>
+      <input type="number" id="jobCounter">
 
       <label>છાપવાનું સાઇડ</label>
       <div class="checkbox-group">
@@ -162,24 +206,11 @@
         <label><input type="checkbox" name="side" value="F+B"> F+B</label>
       </div>
 
-      <label>કલર પ્રિન્ટ</label>
       <div class="checkbox-group">
-        <label><input type="checkbox" name="color" value="હા"> હા</label>
-      </div>
-
-      <label>પ્રિન્ટિંગ સેમ્પલ</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="sample" value="હા"> હા</label>
-      </div>
-
-      <label>પાટવે બોલાવવી</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="binding" value="હા"> હા</label>
-      </div>
-
-      <label>લેમિનેશન</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="lamination" value="હા"> હા</label>
+        <label><input type="checkbox" name="color" value="હા"> કલર પ્રિન્ટ</label>
+        <label><input type="checkbox" name="sample" value="હા"> પ્રિન્ટિંગ સેમ્પલ</label>
+        <label><input type="checkbox" name="binding" value="હા"> પાટવે બોલાવવી</label>
+        <label><input type="checkbox" name="lamination" value="હા"> લેમિનેશન</label>
       </div>
 
       <label>પ્રિન્ટિંગ સેમ્પલ વિગત</label>
@@ -188,7 +219,7 @@
       <label>પેપર કોણો</label>
       <select id="paperSupplier"></select>
 
-      <label>પ્લેટ ક્યાન્થી આવશે</label>
+      <label>પ્લેટ ક્યાંથી આવશે</label>
       <select id="plate"></select>
 
       <button type="submit">સબમિટ કરો</button>
