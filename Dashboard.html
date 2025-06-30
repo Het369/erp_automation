@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>લિસ્ટ ઓડર્સ</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f8f6;
+      padding: 40px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+    }
+    h2 {
+      text-align: center;
+      color: #37474f;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background-color: #e0f2f1;
+      color: #37474f;
+    }
+    button {
+      background-color: #80cbc4;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      margin-right: 5px;
+    }
+    button:hover {
+      background-color: #4db6ac;
+    }
+  </style>
+  <script>
+    function loadDashboard() {
+      google.script.run.withSuccessHandler(renderTable).getJobCards();
+    }
+
+    function renderTable(rows) {
+      const tbody = document.getElementById("jobTableBody");
+      tbody.innerHTML = '';
+      rows.slice(1).forEach((r, i) => {
+        const tr = document.createElement("tr");
+        const fields = [r.data[1], r.data[0], r.data[2], r.data[3], r.data[4], r.data[5], r.data[8], r.data[9]];
+        fields.forEach(cell => {
+          const td = document.createElement("td");
+          td.textContent = cell || '';
+          tr.appendChild(td);
+        });
+        const actionTd = document.createElement("td");
+        actionTd.innerHTML = `<button onclick="edit(${r.row})">✏️</button><button onclick="download(${r.row})">📄</button>`;
+        tr.appendChild(actionTd);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function edit(row) {
+      const base = window.location.href.split('?')[0];
+      window.location.href = `${base}?row=${row}`;
+    }
+
+    function download(row) {
+      google.script.run.withSuccessHandler(url => window.open(url)).generatePDF(row);
+    }
+
+    window.onload = loadDashboard;
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>જૉબ કાર્ડ ડેશબોર્ડ</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>નં.</th>
+          <th>તારીખ</th>
+          <th>પાર્ટી</th>
+          <th>જોબ નામ</th>
+          <th>ગ્રામ</th>
+          <th>પેપર ક્વોલિટી</th>
+          <th>કોપી</th>
+          <th>ટોટલ પુલિયો</th>
+          <th>એક્શન</th>
+        </tr>
+      </thead>
+      <tbody id="jobTableBody"></tbody>
+    </table>
+  </div>
+</body>
+</html>
