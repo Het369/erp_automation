@@ -117,9 +117,13 @@
         document.getElementById('paperSupplier').value,
         document.getElementById('plate').value
       ];
-      google.script.run.saveJobCard(data);
-      alert("✔️ જૉબ કાર્ડ સફળતાપૂર્વક સબમિટ થયું!");
-      document.getElementById("jobForm").reset();
+      google.script.run.withSuccessHandler(url => {
+        alert("✔️ જૉબ કાર્ડ સફળતાપૂર્વક સબમિટ થયું!");
+        if (url) {
+          window.open(url);
+        }
+        document.getElementById("jobForm").reset();
+      }).saveJobCard(data);
     }
 
     window.onload = () => {
