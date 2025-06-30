@@ -14,7 +14,16 @@ function doGet(e) {
 
 function getDropdownValues(sheetName) {
   const sheet = SpreadsheetApp.openById(INPUT_SHEET_ID).getSheetByName(sheetName);
-  return sheet.getRange(2, 1, sheet.getLastRow() - 1).getValues().flat().filter(Boolean).sort();
+  const last = sheet.getLastRow();
+  if (last < 2) {
+    return [];
+  }
+  return sheet
+    .getRange(2, 1, last - 1)
+    .getValues()
+    .flat()
+    .filter(Boolean)
+    .sort();
 }
 
 function saveJobCard(data) {
