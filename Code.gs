@@ -1,6 +1,7 @@
 const INPUT_SHEET_ID = '1OBn4hksubMEshkPKx176i15h9CCNuh10Dk-KO6F21oc';
 const JOB_CARD_SHEET_ID = '14dYfbKNgv72vGIRzUp_jqap0r2jQBPvBTUw6gQcWYKs';
 const JOB_CARD_SHEET = 'Job Card';
+const PDF_FOLDER_ID = '1xQMqXKecC9rOxBTl3Jw0km1OYhsKOajJ';
 
 function doGet(e) {
   if (e.parameter.page === 'dashboard') {
@@ -38,6 +39,9 @@ function saveJobCard(data) {
   }
 
   sheet.appendRow(data);
+
+  // create pdf and return url
+  return createJobCardPDF(data);
 }
 
 function getJobCards() {
@@ -57,13 +61,18 @@ function updateJobCard(row, data) {
 }
 
 function generatePDF(row) {
-  const template = HtmlService.createTemplateFromFile('PdfTemplate');
   const data = getJobCardByRow(row);
+  return createJobCardPDF(data);
+}
+
+function createJobCardPDF(data) {
+  const template = HtmlService.createTemplateFromFile('PdfTemplate');
   template.job = data;
   const html = template.evaluate().getContent();
   const blob = Utilities.newBlob(html, 'text/html', 'JobCard.html');
-  const pdf = blob.getAs(MimeType.PDF).setName('JobCard.pdf');
-  const folder = DriveApp.getRootFolder();
+  const jobNo = data[1] || 'NA';
+  const pdf = blob.getAs(MimeType.PDF).setName(`Job Card_${jobNo}.pdf`);
+  const folder = DriveApp.getFolderById(PDF_FOLDER_ID);
   const file = folder.createFile(pdf);
   return file.getUrl();
 }
